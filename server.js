@@ -13,10 +13,28 @@ const PORT = process.env.PORT || 5000
 
 // ── Middleware ──────────────────────────────────────────
 app.use(helmet())
+// 🟢 YE NAYA CODE LAGAO:
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://vynquora.com',
+  'https://www.vynquora.com'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  methods: ['GET', 'POST'],
-}))
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('CORS policy block'), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+app.options('*', cors());
+
 app.use(express.json())
 
 // Rate limit: max 10 contact form submissions per IP per hour
@@ -38,6 +56,7 @@ const transporter = nodemailer.createTransport({
 // ── Routes ─────────────────────────────────────────────
 
 // Health check
+app.options('*', cors())
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', company: 'Vynquora' })
 })
