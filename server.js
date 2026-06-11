@@ -106,6 +106,11 @@ await transporter.sendMail({
 })
 
 // ── Start ───────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`Vynquora backend running on http://localhost:${PORT}`)
-})
+// Pura hatane ke bajay aise likh sakte ho:
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Vynquora backend running on http://localhost:${PORT}`)
+  })
+}
+
+export default app;
