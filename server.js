@@ -46,13 +46,17 @@ const contactLimiter = rateLimit({
 
 // ── Email transporter (configure in .env) ──────────────
 const transporter = nodemailer.createTransport({
-  host: 'smtp.titan.email',    
-  port: 465,                    
-  secure: true,                  
+  host: 'smtp.titan.email',      
+  port: 587,                     
+  secure: false,                 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS, 
   },
+  tls: {
+   
+    rejectUnauthorized: false
+  }
 })
 // ── Routes ─────────────────────────────────────────────
 
