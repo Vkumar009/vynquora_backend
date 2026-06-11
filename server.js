@@ -46,13 +46,14 @@ const contactLimiter = rateLimit({
 
 // ── Email transporter (configure in .env) ──────────────
 const transporter = nodemailer.createTransport({
-  service: 'gmail',            // change to your provider
+  host: 'smtp.titan.email',    
+  port: 465,                    
+  secure: true,                  
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,  // use App Password for Gmail
+    pass: process.env.EMAIL_PASS, 
   },
 })
-
 // ── Routes ─────────────────────────────────────────────
 
 // Health check
