@@ -116,6 +116,7 @@ await transporter.sendMail({
 })
 
 
+
     res.json({ success: true, message: 'Message sent successfully!' })
   } catch (err) {
     console.error('Email error:', err.message)
@@ -124,6 +125,7 @@ await transporter.sendMail({
     res.json({ success: true, message: 'Message received. We will be in touch soon.' })
   }
 })
+
 
 // ── Start ───────────────────────────────────────────────
 // Pura hatane ke bajay aise likh sakte ho:
