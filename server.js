@@ -94,7 +94,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
       `,
     })
 
-// Auto-reply to sender (Is code ko server.js me replace karein)
+// Auto-reply to sender
 await transporter.sendMail({
   from: `"Vynquora" <${process.env.EMAIL_USER}>`,
   to: email,
@@ -102,8 +102,7 @@ await transporter.sendMail({
   subject: 'We received your message – Vynquora',
   html: `
     <div style="font-family:sans-serif;max-width:600px;margin:auto;padding:32px;background:#060b24;border-radius:12px;color:#e8ecff">
-      <!-- Logo image directly from live site -->
-      <img src="https://vynquora.com" alt="Vynquora" style="width:60px;height:60px;border-radius:50%;margin-bottom:20px;border:2px solid #1a3aff"/>
+      <img src="cid:vynquoraprodlogo" alt="Vynquora" style="width:60px;height:60px;border-radius:50%;margin-bottom:20px;border:2px solid #1a3aff;object-fit:cover;"/>
       <h2 style="color:#00cfff;margin-bottom:12px">Thanks, ${name}!</h2>
       <p style="color:#8b9bc5;line-height:1.7;margin-bottom:16px">
         We've received your message and will get back to you within <strong style="color:#e8ecff">24 hours</strong>.
@@ -113,18 +112,23 @@ await transporter.sendMail({
       <p style="font-size:12px;color:#667cb3;margin:0">This is an automated response. Please do not reply directly to this email.</p>
     </div>
   `,
+  attachments: [
+    {
+      filename: 'logo.png',
+      path: path.join(__dirname, 'assets', 'logo.png'),
+      cid: 'vynquoraprodlogo',
+      contentDisposition: 'inline'
+    }
+  ]
 })
-
-
 
     res.json({ success: true, message: 'Message sent successfully!' })
   } catch (err) {
     console.error('Email error:', err.message)
-    // Still return success to user (don't expose email config errors)
-    // Log internally and handle separately
     res.json({ success: true, message: 'Message received. We will be in touch soon.' })
   }
 })
+
 
 
 // ── Start ───────────────────────────────────────────────
